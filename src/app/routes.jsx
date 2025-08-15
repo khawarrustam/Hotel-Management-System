@@ -11,7 +11,7 @@ import RoomDetails from '../pages/RoomDetails/index';
 import Booking from '../pages/Booking/index';
 import Contact from '../pages/Contact/index';
 import Reviews from '../pages/Reviews/index';
-import Auth from '../pages/Auth/index';
+import { Login, Register, ForgotPassword } from '../pages/Auth';
 
 // Admin Pages
 import AdminDashboard from '../pages/admin/Dashboard/index';
@@ -46,7 +46,10 @@ const AppRoutes = () => {
         <Route path="booking" element={<Booking />} />
         <Route path="contact" element={<Contact />} />
         <Route path="reviews" element={<Reviews />} />
-        <Route path="auth" element={<Auth />} />
+        <Route path="auth/login" element={<Login />} />
+        <Route path="auth/register" element={<Register />} />
+        <Route path="auth/forgot-password" element={<ForgotPassword />} />
+        <Route path="auth" element={<Navigate to="/auth/login" replace />} />
       </Route>
 
       {/* Admin Routes */}
