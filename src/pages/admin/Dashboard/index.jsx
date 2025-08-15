@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
   FaHome,
   FaBed,
@@ -296,12 +297,12 @@ const AdminDashboard = () => {
   };
 
   const sidebarItems = [
-    { icon: FaHome, label: 'Dashboard', path: '/admin', active: true },
-    { icon: FaBed, label: 'Manage Rooms', path: '/admin/rooms' },
-    { icon: FaCalendarAlt, label: 'Manage Bookings', path: '/admin/bookings' },
-    { icon: FaUsers, label: 'Manage Employees', path: '/admin/employees' },
-    { icon: FaStar, label: 'Manage Reviews', path: '/admin/reviews' },
-    { icon: FaCog, label: 'Settings', path: '/admin/settings' },
+    { icon: FaHome, label: 'Dashboard', path: '/admin-demo', active: true },
+    { icon: FaBed, label: 'Manage Rooms', path: '/admin-demo/rooms' },
+    { icon: FaCalendarAlt, label: 'Manage Bookings', path: '/admin-demo/bookings' },
+    { icon: FaUsers, label: 'Manage Employees', path: '/admin-demo/employees' },
+    { icon: FaStar, label: 'Manage Reviews', path: '/admin-demo/reviews' },
+    { icon: FaCog, label: 'Settings', path: '/admin-demo/settings' },
   ];
 
   return (
@@ -317,14 +318,14 @@ const AdminDashboard = () => {
 
         <nav className="sidebar-nav">
           {sidebarItems.map((item) => (
-            <a
+            <Link
               key={item.label}
-              href={item.path}
+              to={item.path}
               className={`nav-item ${item.active ? 'active' : ''}`}
             >
               <item.icon className="nav-icon" />
               <span className="nav-label">{item.label}</span>
-            </a>
+            </Link>
           ))}
         </nav>
 

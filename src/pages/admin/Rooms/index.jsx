@@ -18,7 +18,16 @@ import {
   FaWifi,
   FaCoffee,
   FaTv,
-  FaSnowflake
+  FaSnowflake,
+  FaSort,
+  FaSortUp,
+  FaSortDown,
+  FaCheck,
+  FaStar,
+  FaInfo,
+  FaPencilAlt,
+  FaTrashAlt,
+  FaExternalLinkAlt
 } from 'react-icons/fa';
 import './AdminRooms.scss';
 
@@ -101,6 +110,58 @@ const mockRooms = [
     amenities: ['wifi', 'tv', 'ac', 'minibar'],
     size: 95,
     floor: 5
+  },
+  {
+    id: 7,
+    name: 'Business Suite 202',
+    type: 'Business Suite',
+    price: 520,
+    status: 'available',
+    capacity: 2,
+    description: 'Professional business suite with workspace and meeting area.',
+    image: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
+    amenities: ['wifi', 'tv', 'ac', 'minibar'],
+    size: 55,
+    floor: 2
+  },
+  {
+    id: 8,
+    name: 'Luxury Room 305',
+    type: 'Luxury Room',
+    price: 750,
+    status: 'maintenance',
+    capacity: 2,
+    description: 'Premium luxury room with high-end finishes and exclusive amenities.',
+    image: 'https://images.unsplash.com/photo-1563298723-dcfebaa392e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
+    amenities: ['wifi', 'tv', 'ac', 'minibar'],
+    size: 60,
+    floor: 3
+  },
+  {
+    id: 9,
+    name: 'Standard Plus 103',
+    type: 'Standard Room',
+    price: 320,
+    status: 'available',
+    capacity: 2,
+    description: 'Enhanced standard room with upgraded amenities and modern decor.',
+    image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
+    amenities: ['wifi', 'tv', 'ac'],
+    size: 38,
+    floor: 1
+  },
+  {
+    id: 10,
+    name: 'Penthouse 601',
+    type: 'Presidential Suite',
+    price: 1200,
+    status: 'available',
+    capacity: 8,
+    description: 'Exclusive penthouse suite with private terrace and panoramic views.',
+    image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
+    amenities: ['wifi', 'tv', 'ac', 'minibar'],
+    size: 180,
+    floor: 6
   }
 ];
 
@@ -110,11 +171,17 @@ const statusOptions = ['All Status', 'available', 'occupied', 'maintenance'];
 const AdminRooms = () => {
   const [rooms, setRooms] = useState(mockRooms);
   const [filteredRooms, setFilteredRooms] = useState(mockRooms);
-  const [_loading, _setLoading] = useState(false);
+  // Table sorting state
+  const [sortField, setSortField] = useState('name');
+  const [sortDirection, setSortDirection] = useState('asc');
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(false);
   const [editingRoom, setEditingRoom] = useState(null);
   const [deletingRoom, setDeletingRoom] = useState(null);
+  const [viewingRoom, setViewingRoom] = useState(null);
   const [viewMode, setViewMode] = useState('table'); // 'table' or 'cards'
   
   // Form state
@@ -143,10 +210,6 @@ const AdminRooms = () => {
   const [roomsPerPage] = useState(6);
 
   useEffect(() => {
-    filterRooms();
-  }, [searchQuery, selectedType, selectedStatus, priceRange, rooms]);
-
-  const filterRooms = () => {
     let filtered = [...rooms];
 
     // Search filter
@@ -172,9 +235,30 @@ const AdminRooms = () => {
       room.price >= priceRange[0] && room.price <= priceRange[1]
     );
 
+    // Apply sorting
+    filtered.sort((a, b) => {
+      let aValue = a[sortField];
+      let bValue = b[sortField];
+
+      // Handle different data types
+      if (sortField === 'price' || sortField === 'capacity') {
+        aValue = Number(aValue);
+        bValue = Number(bValue);
+      } else if (typeof aValue === 'string') {
+        aValue = aValue.toLowerCase();
+        bValue = bValue.toLowerCase();
+      }
+
+      if (sortDirection === 'asc') {
+        return aValue > bValue ? 1 : -1;
+      } else {
+        return aValue < bValue ? 1 : -1;
+      }
+    });
+
     setFilteredRooms(filtered);
     setCurrentPage(1); // Reset to first page when filtering
-  };
+  }, [searchQuery, selectedType, selectedStatus, priceRange, rooms, sortField, sortDirection]);
 
   const handleAddRoom = () => {
     setEditingRoom(null);
@@ -191,6 +275,62 @@ const AdminRooms = () => {
       image: ''
     });
     setShowForm(true);
+  };
+
+  // Sorting functions
+  const handleSort = (field) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const getSortIcon = (field) => {
+    if (sortField !== field) return <FaSort />;
+    return sortDirection === 'asc' ? <FaSortUp /> : <FaSortDown />;
+  };
+
+  // Row selection functions
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedRows([]);
+    } else {
+      setSelectedRows(currentRooms.map(room => room.id));
+    }
+    setSelectAll(!selectAll);
+  };
+
+  const handleSelectRow = (roomId) => {
+    if (selectedRows.includes(roomId)) {
+      setSelectedRows(selectedRows.filter(id => id !== roomId));
+    } else {
+      setSelectedRows([...selectedRows, roomId]);
+    }
+  };
+
+  // Bulk actions
+  const handleBulkDelete = () => {
+    if (selectedRows.length === 0) return;
+    
+    if (window.confirm(`Are you sure you want to delete ${selectedRows.length} rooms?`)) {
+      setRooms(rooms.filter(room => !selectedRows.includes(room.id)));
+      setSelectedRows([]);
+      setSelectAll(false);
+    }
+  };
+
+  const handleBulkStatusChange = (newStatus) => {
+    if (selectedRows.length === 0) return;
+    
+    setRooms(rooms.map(room => 
+      selectedRows.includes(room.id) 
+        ? { ...room, status: newStatus }
+        : room
+    ));
+    setSelectedRows([]);
+    setSelectAll(false);
   };
 
   const handleEditRoom = (room) => {
@@ -213,6 +353,11 @@ const AdminRooms = () => {
   const handleDeleteRoom = (room) => {
     setDeletingRoom(room);
     setShowDeleteModal(true);
+  };
+
+  const handleViewRoom = (room) => {
+    setViewingRoom(room);
+    setShowViewModal(true);
   };
 
   const confirmDelete = () => {
@@ -303,16 +448,17 @@ const AdminRooms = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  if (loading) {
-    return (
-      <div className="admin-rooms loading">
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <p>Loading rooms...</p>
-        </div>
-      </div>
-    );
-  }
+  // Remove unused loading state check since we're using mock data
+  // if (_loading) {
+  //   return (
+  //     <div className="admin-rooms loading">
+  //       <div className="loading-spinner">
+  //         <div className="spinner"></div>
+  //         <p>Loading rooms...</p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="admin-rooms">
@@ -441,21 +587,94 @@ const AdminRooms = () => {
       {/* Rooms Display */}
       {viewMode === 'table' ? (
         <div className="rooms-table-container">
-          <table className="rooms-table">
+          {/* Bulk Actions Bar */}
+          {selectedRows.length > 0 && (
+            <div className="bulk-actions-bar">
+              <div className="bulk-info">
+                <FaCheck />
+                <span>{selectedRows.length} room{selectedRows.length > 1 ? 's' : ''} selected</span>
+              </div>
+              <div className="bulk-actions">
+                <button 
+                  className="bulk-btn status available"
+                  onClick={() => handleBulkStatusChange('available')}
+                  title="Mark as Available"
+                >
+                  <FaCheckCircle /> Available
+                </button>
+                <button 
+                  className="bulk-btn status maintenance"
+                  onClick={() => handleBulkStatusChange('maintenance')}
+                  title="Mark as Maintenance"
+                >
+                  <FaTimesCircle /> Maintenance
+                </button>
+                <button 
+                  className="bulk-btn delete"
+                  onClick={handleBulkDelete}
+                  title="Delete Selected"
+                >
+                  <FaTrash /> Delete
+                </button>
+              </div>
+            </div>
+          )}
+
+          <table className="rooms-table enhanced">
             <thead>
               <tr>
-                <th>Room</th>
-                <th>Type</th>
-                <th>Price/Night</th>
-                <th>Capacity</th>
-                <th>Status</th>
+                <th className="select-column">
+                  <label className="checkbox-container">
+                    <input
+                      type="checkbox"
+                      checked={selectAll}
+                      onChange={handleSelectAll}
+                    />
+                    <span className="checkmark"></span>
+                  </label>
+                </th>
+                <th className="sortable" onClick={() => handleSort('name')}>
+                  <div className="header-content">
+                    <span>Room</span>
+                    <span className="sort-icon">{getSortIcon('name')}</span>
+                  </div>
+                </th>
+                <th className="sortable" onClick={() => handleSort('type')}>
+                  <div className="header-content">
+                    <span>Type</span>
+                    <span className="sort-icon">{getSortIcon('type')}</span>
+                  </div>
+                </th>
+                <th className="sortable" onClick={() => handleSort('price')}>
+                  <div className="header-content">
+                    <span>Price/Night</span>
+                    <span className="sort-icon">{getSortIcon('price')}</span>
+                  </div>
+                </th>
+                <th className="sortable" onClick={() => handleSort('capacity')}>
+                  <div className="header-content">
+                    <span>Capacity</span>
+                    <span className="sort-icon">{getSortIcon('capacity')}</span>
+                  </div>
+                </th>
+                <th className="sortable" onClick={() => handleSort('status')}>
+                  <div className="header-content">
+                    <span>Status</span>
+                    <span className="sort-icon">{getSortIcon('status')}</span>
+                  </div>
+                </th>
+                <th>
+                  <div className="header-content">
+                    <span>Rating</span>
+                  </div>
+                </th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {currentRooms.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="no-results">
+                  <td colSpan="8" className="no-results">
                     <div className="no-results-content">
                       <FaBed className="no-results-icon" />
                       <h3>No rooms found</h3>
@@ -464,50 +683,83 @@ const AdminRooms = () => {
                   </td>
                 </tr>
               ) : (
-                currentRooms.map(room => (
-                  <tr key={room.id} className="room-row">
+                currentRooms.map((room, index) => (
+                  <tr 
+                    key={room.id} 
+                    className={`room-row ${selectedRows.includes(room.id) ? 'selected' : ''} ${index % 2 === 0 ? 'even' : 'odd'}`}
+                  >
+                    <td className="select-column">
+                      <label className="checkbox-container">
+                        <input
+                          type="checkbox"
+                          checked={selectedRows.includes(room.id)}
+                          onChange={() => handleSelectRow(room.id)}
+                        />
+                        <span className="checkmark"></span>
+                      </label>
+                    </td>
                     <td className="room-info">
                       <div className="room-thumbnail">
                         <img src={room.image} alt={room.name} />
+                        <div className="room-number">#{room.id}</div>
                       </div>
                       <div className="room-details">
                         <h4>{room.name}</h4>
-                        <span className="room-size">{room.size} m²</span>
+                        <span className="room-size">{room.size} m² • Floor {room.floor}</span>
                       </div>
                     </td>
-                    <td className="room-type">{room.type}</td>
+                    <td className="room-type">
+                      <span className="type-badge">{room.type}</span>
+                    </td>
                     <td className="room-price">
-                      <span className="price">${room.price}</span>
-                      <span className="price-label">per night</span>
+                      <div className="price-container">
+                        <span className="price">${room.price}</span>
+                        <span className="price-label">per night</span>
+                      </div>
                     </td>
                     <td className="room-capacity">
-                      <FaUsers />
-                      {room.capacity} guests
+                      <div className="capacity-info">
+                        <FaUsers />
+                        <span>{room.capacity} guests</span>
+                      </div>
                     </td>
                     <td className="room-status">
                       {getStatusBadge(room.status)}
                     </td>
+                    <td className="room-rating">
+                      <div className="rating-display">
+                        <span className="rating-number">4.{Math.floor(Math.random() * 5) + 5}</span>
+                        <div className="stars">
+                          {[...Array(5)].map((_, i) => (
+                            <FaStar key={i} className="star filled" />
+                          ))}
+                        </div>
+                      </div>
+                    </td>
                     <td className="room-actions">
-                      <button 
-                        className="action-btn view"
-                        title="View Details"
-                      >
-                        <FaEye />
-                      </button>
-                      <button 
-                        className="action-btn edit"
-                        onClick={() => handleEditRoom(room)}
-                        title="Edit Room"
-                      >
-                        <FaEdit />
-                      </button>
-                      <button 
-                        className="action-btn delete"
-                        onClick={() => handleDeleteRoom(room)}
-                        title="Delete Room"
-                      >
-                        <FaTrash />
-                      </button>
+                      <div className="action-buttons">
+                        <button 
+                          className="action-btn view"
+                          onClick={() => handleViewRoom(room)}
+                          title="View Room Details"
+                        >
+                          <FaEye />
+                        </button>
+                        <button 
+                          className="action-btn edit"
+                          onClick={() => handleEditRoom(room)}
+                          title="Edit Room"
+                        >
+                          <FaPencilAlt />
+                        </button>
+                        <button 
+                          className="action-btn delete"
+                          onClick={() => handleDeleteRoom(room)}
+                          title="Delete Room"
+                        >
+                          <FaTrashAlt />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -567,23 +819,27 @@ const AdminRooms = () => {
                   <div className="room-actions">
                     <button 
                       className="action-btn view"
-                      title="View Details"
+                      onClick={() => handleViewRoom(room)}
+                      title="View Room Details"
                     >
                       <FaEye />
+                      <span className="btn-text">View</span>
                     </button>
                     <button 
                       className="action-btn edit"
                       onClick={() => handleEditRoom(room)}
                       title="Edit Room"
                     >
-                      <FaEdit />
+                      <FaPencilAlt />
+                      <span className="btn-text">Edit</span>
                     </button>
                     <button 
                       className="action-btn delete"
                       onClick={() => handleDeleteRoom(room)}
                       title="Delete Room"
                     >
-                      <FaTrash />
+                      <FaTrashAlt />
+                      <span className="btn-text">Delete</span>
                     </button>
                   </div>
                 </div>
@@ -864,6 +1120,128 @@ const AdminRooms = () => {
               >
                 Delete Room
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* View Room Details Modal */}
+      {showViewModal && viewingRoom && (
+        <div className="modal-overlay">
+          <div className="room-details-modal">
+            <div className="modal-header">
+              <h2>
+                <FaInfo />
+                Room Details
+              </h2>
+              <button 
+                className="close-modal"
+                onClick={() => setShowViewModal(false)}
+              >
+                <FaTimes />
+              </button>
+            </div>
+
+            <div className="room-details-content">
+              <div className="room-image-section">
+                <img src={viewingRoom.image} alt={viewingRoom.name} />
+                <div className="room-status-overlay">
+                  {getStatusBadge(viewingRoom.status)}
+                </div>
+              </div>
+
+              <div className="room-info-grid">
+                <div className="info-card">
+                  <h3>
+                    <FaBed />
+                    Basic Information
+                  </h3>
+                  <div className="info-details">
+                    <div className="info-row">
+                      <span className="label">Room Name:</span>
+                      <span className="value">{viewingRoom.name}</span>
+                    </div>
+                    <div className="info-row">
+                      <span className="label">Room Type:</span>
+                      <span className="value type-badge">{viewingRoom.type}</span>
+                    </div>
+                    <div className="info-row">
+                      <span className="label">Floor:</span>
+                      <span className="value">Floor {viewingRoom.floor}</span>
+                    </div>
+                    <div className="info-row">
+                      <span className="label">Size:</span>
+                      <span className="value">{viewingRoom.size} m²</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="info-card">
+                  <h3>
+                    <FaDollarSign />
+                    Pricing & Capacity
+                  </h3>
+                  <div className="info-details">
+                    <div className="info-row">
+                      <span className="label">Price per Night:</span>
+                      <span className="value price">${viewingRoom.price}</span>
+                    </div>
+                    <div className="info-row">
+                      <span className="label">Maximum Capacity:</span>
+                      <span className="value">
+                        <FaUsers /> {viewingRoom.capacity} guests
+                      </span>
+                    </div>
+                    <div className="info-row">
+                      <span className="label">Current Status:</span>
+                      <span className="value">{getStatusBadge(viewingRoom.status)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="info-card amenities-card">
+                  <h3>
+                    <FaStar />
+                    Amenities
+                  </h3>
+                  <div className="amenities-grid">
+                    {viewingRoom.amenities.map(amenity => (
+                      <div key={amenity} className="amenity-item">
+                        {getAmenityIcon(amenity)}
+                        <span>{amenity.charAt(0).toUpperCase() + amenity.slice(1)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="info-card description-card">
+                  <h3>
+                    <FaInfo />
+                    Description
+                  </h3>
+                  <p className="description-text">{viewingRoom.description}</p>
+                </div>
+              </div>
+
+              <div className="modal-actions">
+                <button 
+                  className="action-btn edit primary"
+                  onClick={() => {
+                    setShowViewModal(false);
+                    handleEditRoom(viewingRoom);
+                  }}
+                >
+                  <FaPencilAlt />
+                  Edit Room
+                </button>
+                <button 
+                  className="action-btn view secondary"
+                  onClick={() => setShowViewModal(false)}
+                >
+                  <FaTimes />
+                  Close
+                </button>
+              </div>
             </div>
           </div>
         </div>
