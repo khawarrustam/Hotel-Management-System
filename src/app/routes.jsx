@@ -68,6 +68,15 @@ const AppRoutes = () => {
         <Route path="reviews" element={<AdminReviews />} />
       </Route>
 
+      {/* Demo Admin Route (bypasses auth for testing) */}
+      <Route path="/admin-demo" element={<AdminLayout />}>
+        <Route index element={<AdminDashboard />} />
+        <Route path="rooms" element={<AdminRooms />} />
+        <Route path="employees" element={<AdminEmployees />} />
+        <Route path="bookings" element={<AdminBookings />} />
+        <Route path="reviews" element={<AdminReviews />} />
+      </Route>
+
       {/* Catch all route */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
