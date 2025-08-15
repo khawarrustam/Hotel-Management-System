@@ -51,14 +51,16 @@ export const AuthProvider = ({ children }) => {
     // Check for existing auth token on app load
     const token = localStorage.getItem('authToken');
     if (token) {
-      // Validate token and get user data
-      validateToken(token);
+      // In development mode, skip token validation to avoid network errors
+      // TODO: Enable token validation when backend is available
+      // validateToken(token);
+      dispatch({ type: 'AUTH_FAILURE', payload: null });
     } else {
       dispatch({ type: 'AUTH_FAILURE', payload: null });
     }
   }, []);
 
-  const validateToken = async (token) => {
+  const _validateToken = async (_token) => {
     try {
       // API call to validate token and get user data
       // const response = await authAPI.validateToken(token);
@@ -71,7 +73,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = async (credentials) => {
+  const login = async (_credentials) => {
     dispatch({ type: 'AUTH_START' });
     try {
       // API call to login
@@ -86,7 +88,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (userData) => {
+  const register = async (_userData) => {
     dispatch({ type: 'AUTH_START' });
     try {
       // API call to register

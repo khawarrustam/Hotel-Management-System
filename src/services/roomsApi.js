@@ -1,19 +1,48 @@
 import apiClient from './apiClient';
+import { DEV_FLAGS } from '../config/development';
+import mockApi from './mockApi';
 
 export const roomsApi = {
   // Get all rooms with optional filters
-  getAll: (params = {}) => {
-    return apiClient.get('/rooms', { params });
+  getAll: async (params = {}) => {
+    try {
+      if (DEV_FLAGS.useMockData) {
+        console.log('🚧 Using mock data for rooms');
+        return await mockApi.rooms.getAll(params);
+      }
+      return apiClient.get('/rooms', { params });
+    } catch (error) {
+      console.error('Error fetching rooms:', error);
+      throw error;
+    }
   },
 
   // Get room by ID
-  getById: (id) => {
-    return apiClient.get(`/rooms/${id}`);
+  getById: async (id) => {
+    try {
+      if (DEV_FLAGS.useMockData) {
+        console.log('🚧 Using mock data for room details');
+        return await mockApi.rooms.getById(id);
+      }
+      return apiClient.get(`/rooms/${id}`);
+    } catch (error) {
+      console.error('Error fetching room details:', error);
+      throw error;
+    }
   },
 
   // Search rooms with specific criteria
-  search: (searchParams) => {
-    return apiClient.post('/rooms/search', searchParams);
+  search: async (searchParams) => {
+    try {
+      if (DEV_FLAGS.useMockData) {
+        console.log('🚧 Using mock data for room search');
+        return await mockApi.rooms.search(searchParams);
+      }
+      return apiClient.post('/rooms/search', searchParams);
+    } catch (error) {
+      console.error('Error searching rooms:', error);
+      throw error;
+    }
   },
 
   // Get available rooms for specific dates

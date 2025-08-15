@@ -69,7 +69,7 @@ export const BookingProvider = ({ children }) => {
     dispatch({ type: 'SET_GUESTS', payload: guests });
   };
 
-  const createBooking = async (bookingData) => {
+  const createBooking = async (_bookingData) => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
       // API call to create booking
@@ -100,7 +100,7 @@ export const BookingProvider = ({ children }) => {
     }
   };
 
-  const cancelBooking = async (bookingId) => {
+  const cancelBooking = async (_bookingId) => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
       // API call to cancel booking
