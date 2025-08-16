@@ -1,0 +1,180 @@
+/* Badge Atom Styles */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 25px; // Rounded-pill
+  white-space: nowrap;
+  transition: all 0.3s ease-in-out;
+  
+  // Size variants
+  &--small {
+    padding: 4px 8px;
+    font-size: 10px;
+    min-height: 20px;
+  }
+  
+  &--medium {
+    padding: 6px 12px;
+    font-size: 12px;
+    min-height: 24px;
+  }
+  
+  &--large {
+    padding: 8px 16px;
+    font-size: 14px;
+    min-height: 28px;
+  }
+  
+  // Type variants
+  &--success {
+    background: #10B981;
+    color: white;
+    
+    &:hover {
+      background: #059669;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    }
+  }
+  
+  &--warning {
+    background: #F59E0B;
+    color: white;
+    
+    &:hover {
+      background: #D97706;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+    }
+  }
+  
+  &--error {
+    background: #EF4444;
+    color: white;
+    
+    &:hover {
+      background: #DC2626;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+    }
+  }
+  
+  &--info {
+    background: #1E3A8A;
+    color: white;
+    
+    &:hover {
+      background: #1E40AF;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(30, 58, 138, 0.3);
+    }
+  }
+  
+  // Status specific badges (for room status)
+  &--available {
+    background: linear-gradient(135deg, #10B981, #059669);
+    color: white;
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+    }
+  }
+  
+  &--occupied {
+    background: linear-gradient(135deg, #F59E0B, #D97706);
+    color: white;
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+    }
+  }
+  
+  &--maintenance {
+    background: linear-gradient(135deg, #EF4444, #DC2626);
+    color: white;
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+    }
+  }
+  
+  // Room type badge
+  &--room-type {
+    background: linear-gradient(135deg, #1E3A8A, #1E40AF);
+    color: white;
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(30, 58, 138, 0.4);
+    }
+  }
+  
+  // Neutral variant
+  &--neutral {
+    background: #6B7280;
+    color: white;
+    
+    &:hover {
+      background: #4B5563;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3);
+    }
+  }
+  
+  // Light variants
+  &--light-success {
+    background: #D1FAE5;
+    color: #065F46;
+    border: 1px solid #A7F3D0;
+  }
+  
+  &--light-warning {
+    background: #FEF3C7;
+    color: #92400E;
+    border: 1px solid #FDE68A;
+  }
+  
+  &--light-error {
+    background: #FEE2E2;
+    color: #991B1B;
+    border: 1px solid #FECACA;
+  }
+  
+  &--light-info {
+    background: #DBEAFE;
+    color: #1E40AF;
+    border: 1px solid #93C5FD;
+  }
+}
+
+// Mobile responsiveness
+@media (max-width: 768px) {
+  .badge {
+    &--small {
+      padding: 3px 6px;
+      font-size: 9px;
+      min-height: 18px;
+    }
+    
+    &--medium {
+      padding: 5px 10px;
+      font-size: 11px;
+      min-height: 22px;
+    }
+    
+    &--large {
+      padding: 6px 12px;
+      font-size: 12px;
+      min-height: 26px;
+    }
+  }
+}

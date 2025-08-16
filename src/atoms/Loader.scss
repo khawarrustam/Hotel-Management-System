@@ -1,0 +1,330 @@
+/* Loader Atom Styles */
+
+.loader {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  
+  // Size variants
+  &--small {
+    width: 20px;
+    height: 20px;
+  }
+  
+  &--medium {
+    width: 32px;
+    height: 32px;
+  }
+  
+  &--large {
+    width: 48px;
+    height: 48px;
+  }
+  
+  &--xlarge {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+// Spinner Loader
+.loader--spinner {
+  .spinner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-top: 2px solid;
+    animation: spin 1s linear infinite;
+  }
+}
+
+// Color variants for spinner
+.loader--primary .spinner {
+  border-top-color: #1E3A8A;
+  border-right-color: rgba(30, 58, 138, 0.2);
+}
+
+.loader--accent .spinner {
+  border-top-color: #FBBF24;
+  border-right-color: rgba(251, 191, 36, 0.2);
+}
+
+.loader--success .spinner {
+  border-top-color: #10B981;
+  border-right-color: rgba(16, 185, 129, 0.2);
+}
+
+.loader--error .spinner {
+  border-top-color: #EF4444;
+  border-right-color: rgba(239, 68, 68, 0.2);
+}
+
+.loader--neutral .spinner {
+  border-top-color: #6B7280;
+  border-right-color: rgba(107, 114, 128, 0.2);
+}
+
+.loader--gradient .spinner {
+  background: conic-gradient(from 0deg, #1E3A8A, #FBBF24, #1E3A8A);
+  border: none;
+  mask: radial-gradient(farthest-side, transparent calc(100% - 2px), black calc(100% - 2px));
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), black calc(100% - 2px));
+}
+
+// Dots Loader
+.loader--dots {
+  gap: 4px;
+  
+  .dot {
+    width: 25%;
+    height: 25%;
+    border-radius: 50%;
+    animation: dotBounce 1.4s ease-in-out infinite both;
+    
+    &:nth-child(1) { animation-delay: -0.32s; }
+    &:nth-child(2) { animation-delay: -0.16s; }
+    &:nth-child(3) { animation-delay: 0s; }
+  }
+}
+
+// Color variants for dots
+.loader--primary .dot { background: #1E3A8A; }
+.loader--accent .dot { background: #FBBF24; }
+.loader--success .dot { background: #10B981; }
+.loader--error .dot { background: #EF4444; }
+.loader--neutral .dot { background: #6B7280; }
+
+// Pulse Loader
+.loader--pulse {
+  .pulse-circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+}
+
+// Color variants for pulse
+.loader--primary .pulse-circle { 
+  background: radial-gradient(circle, #1E3A8A 0%, rgba(30, 58, 138, 0.1) 70%);
+}
+.loader--accent .pulse-circle { 
+  background: radial-gradient(circle, #FBBF24 0%, rgba(251, 191, 36, 0.1) 70%);
+}
+.loader--success .pulse-circle { 
+  background: radial-gradient(circle, #10B981 0%, rgba(16, 185, 129, 0.1) 70%);
+}
+.loader--error .pulse-circle { 
+  background: radial-gradient(circle, #EF4444 0%, rgba(239, 68, 68, 0.1) 70%);
+}
+.loader--neutral .pulse-circle { 
+  background: radial-gradient(circle, #6B7280 0%, rgba(107, 114, 128, 0.1) 70%);
+}
+
+// Bars Loader
+.loader--bars {
+  gap: 2px;
+  
+  .bar {
+    width: 20%;
+    height: 100%;
+    border-radius: 2px;
+    animation: barStretch 1.2s ease-in-out infinite;
+    
+    &:nth-child(1) { animation-delay: -1.2s; }
+    &:nth-child(2) { animation-delay: -1.1s; }
+    &:nth-child(3) { animation-delay: -1.0s; }
+    &:nth-child(4) { animation-delay: -0.9s; }
+  }
+}
+
+// Color variants for bars
+.loader--primary .bar { background: #1E3A8A; }
+.loader--accent .bar { background: #FBBF24; }
+.loader--success .bar { background: #10B981; }
+.loader--error .bar { background: #EF4444; }
+.loader--neutral .bar { background: #6B7280; }
+
+// Animations
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes dotBounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+}
+
+@keyframes barStretch {
+  0%, 40%, 100% {
+    transform: scaleY(0.4);
+    opacity: 0.5;
+  }
+  20% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+// Button loading state
+.btn--loading {
+  position: relative;
+  color: transparent !important;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    color: white;
+  }
+  
+  &.btn--accent::after {
+    color: #1F2937;
+  }
+}
+
+// Table loading overlay
+.table-loading {
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 10;
+    backdrop-filter: blur(2px);
+  }
+  
+  .loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 11;
+  }
+}
+
+// Page loading overlay
+.page-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(249, 250, 251, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(4px);
+  
+  .loader {
+    transform: scale(1.5);
+  }
+}
+
+// Skeleton loading
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #E5E7EB 25%,
+    #F3F4F6 50%,
+    #E5E7EB 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+  
+  &--text {
+    height: 16px;
+    margin-bottom: 8px;
+    
+    &:last-child {
+      margin-bottom: 0;
+      width: 60%;
+    }
+  }
+  
+  &--avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+  }
+  
+  &--button {
+    height: 40px;
+    width: 120px;
+    border-radius: 20px;
+  }
+  
+  &--card {
+    height: 200px;
+    border-radius: 8px;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+// Mobile responsiveness
+@media (max-width: 768px) {
+  .loader {
+    &--small {
+      width: 18px;
+      height: 18px;
+    }
+    
+    &--medium {
+      width: 28px;
+      height: 28px;
+    }
+    
+    &--large {
+      width: 40px;
+      height: 40px;
+    }
+    
+    &--xlarge {
+      width: 56px;
+      height: 56px;
+    }
+  }
+  
+  .btn--loading::after {
+    width: 14px;
+    height: 14px;
+  }
+}

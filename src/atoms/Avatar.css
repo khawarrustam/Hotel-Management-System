@@ -1,0 +1,170 @@
+/* Avatar Atom Styles */
+.avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1E3A8A, #FBBF24);
+  transition: all 0.3s ease-in-out;
+}
+.avatar--small {
+  width: 32px;
+  height: 32px;
+}
+.avatar--medium {
+  width: 48px;
+  height: 48px;
+}
+.avatar--large {
+  width: 64px;
+  height: 64px;
+}
+.avatar--xlarge {
+  width: 80px;
+  height: 80px;
+}
+.avatar--circle {
+  border-radius: 50%;
+}
+.avatar--rounded {
+  border-radius: 12px;
+}
+.avatar--square {
+  border-radius: 8px;
+}
+.avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center;
+     object-position: center;
+  transition: all 0.3s ease-in-out;
+}
+
+.avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #1E3A8A, #3B82F6);
+}
+.avatar--small .avatar-fallback {
+  font-size: 12px;
+}
+.avatar--medium .avatar-fallback {
+  font-size: 16px;
+}
+.avatar--large .avatar-fallback {
+  font-size: 20px;
+}
+.avatar--xlarge .avatar-fallback {
+  font-size: 24px;
+}
+
+.avatar--status::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 25%;
+  height: 25%;
+  border-radius: 50%;
+  border: 2px solid white;
+  background: #10B981;
+}
+.avatar--offline::after {
+  background: #6B7280;
+}
+.avatar--busy::after {
+  background: #EF4444;
+}
+.avatar--away::after {
+  background: #F59E0B;
+}
+
+.avatar--room .avatar-fallback {
+  background: linear-gradient(135deg, #FBBF24, #F59E0B);
+  color: #1F2937;
+  font-weight: 700;
+}
+.avatar--employee .avatar-fallback {
+  background: linear-gradient(135deg, #1E3A8A, #3B82F6);
+  color: white;
+}
+.avatar--guest .avatar-fallback {
+  background: linear-gradient(135deg, #10B981, #059669);
+  color: white;
+}
+
+.avatar--loading {
+  background: linear-gradient(90deg, #E5E7EB 25%, #F3F4F6 50%, #E5E7EB 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+.avatar--loading .avatar-image,
+.avatar--loading .avatar-fallback {
+  display: none;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+.avatar-group {
+  display: flex;
+  align-items: center;
+}
+.avatar-group .avatar {
+  margin-left: -8px;
+  border: 2px solid white;
+  position: relative;
+  z-index: 1;
+}
+.avatar-group .avatar:first-child {
+  margin-left: 0;
+  z-index: 3;
+}
+.avatar-group .avatar:nth-child(2) {
+  z-index: 2;
+}
+.avatar-group .avatar:hover {
+  z-index: 10;
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .avatar--small {
+    width: 36px;
+    height: 36px;
+  }
+  .avatar--medium {
+    width: 52px;
+    height: 52px;
+  }
+  .avatar--large {
+    width: 68px;
+    height: 68px;
+  }
+  .avatar--xlarge {
+    width: 84px;
+    height: 84px;
+  }
+  .avatar-group .avatar {
+    margin-left: -6px;
+  }
+}/*# sourceMappingURL=Avatar.css.map */
